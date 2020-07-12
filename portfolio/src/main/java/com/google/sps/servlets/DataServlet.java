@@ -31,9 +31,6 @@ public class DataServlet extends HttpServlet {
   @Override
   public void init() {
     quotes = new ArrayList<>();
-    quotes.add("comment 1");
-    quotes.add("comment 2");
-    quotes.add("comment 3");
   }
 
   @Override
@@ -42,10 +39,28 @@ public class DataServlet extends HttpServlet {
     response.setContentType("text/html;");
     response.getWriter().println(json);
   }
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+    // Get the input from the form.
+    String text = getParameter(request, "text-input", "");
+    quotes.add(text);
+    // Redirect back to the HTML page.
+    response.sendRedirect("/index.html");
+  }
+
+
   private String convertToJsonUsingGson(ArrayList<String> quotes) {
     Gson gson = new Gson();
     String json = gson.toJson(quotes);
     return json;
+  }
+  private String getParameter(HttpServletRequest request, String name, String defaultValue) {
+    String value = request.getParameter(name);
+    if (value == null) {
+      return defaultValue;
+    }
+    return value;
   }
 
 }
