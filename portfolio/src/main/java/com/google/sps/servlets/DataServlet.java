@@ -15,6 +15,10 @@
 package com.google.sps.servlets;
 import com.google.gson.Gson;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.servlet.annotation.WebServlet;
@@ -44,7 +48,13 @@ public class DataServlet extends HttpServlet {
 
     // Get the input from the form.
     String text = getParameter(request, "text-input", "");
-    quotes.add(text);
+    long timestamp = System.currentTimeMillis();
+
+    Entity taskEntity = new Entity("Comment");
+    taskEntity.setProperty("text", text);
+    taskEntity.setProperty("timestamp", timestamp);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(taskEntity);
     // Redirect back to the HTML page.
     response.sendRedirect("/index.html");
   }
