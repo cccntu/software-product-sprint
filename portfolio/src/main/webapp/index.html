@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
-  <body>
+  <body onload="getGreetingUsingArrowFunctions()">
     <div id="content">
       <h1>Jonathan's Portfolio</h1>
       <p>This is my portfolio.</p>
@@ -20,8 +20,17 @@
     </a>
 
       <p>Click here to get a random message:</p>
-      <button onclick="addRandomGreeting()">Hello</button>
+      <button onclick="getGreetingUsingArrowFunctions()">Hello</button>
       <div id="greeting-container"></div>
+
+      <form action="/data" method="POST">
+
+        <p>Enter a comma-separated list of words:</p>
+        <textarea name="text-input"></textarea>
+
+        <input type="submit" />
+      </form>
     </div>
+
   </body>
 </html>
