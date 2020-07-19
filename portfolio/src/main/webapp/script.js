@@ -37,3 +37,13 @@ function getGreetingUsingArrowFunctions() {
     console.log(quote);
   });
 }
+function getLoginStatus() {
+  fetch('/home').then(response => response.text()).then((html) => {
+    document.getElementById('login-container').innerHTML = html;
+
+  });
+}
+function start(){
+    getGreetingUsingArrowFunctions();
+    getLoginStatus();
+}
