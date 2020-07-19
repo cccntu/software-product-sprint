@@ -31,18 +31,16 @@ function addRandomGreeting() {
   const greetingContainer = document.getElementById('greeting-container');
   greetingContainer.innerText = greeting;
 }
-function getGreetingUsingArrowFunctions() {
+function getComments() {
   fetch('/data').then(response => response.json()).then((comments) => {
     console.log(comments);
     var html = "<ul>";
-q
+
     for (const comment of comments) {
         html += `<li>${comment['email']}: ${comment['text']}</li>`;
     }
     html += "</ul>";
-    document.getElementById('greeting-container').innerHTML = html;
-    //document.getElementById('greeting-container').innerText = json;
-    //console.log(quote);
+    document.getElementById('comments-container').innerHTML = html;
   });
 }
 function getLoginStatus() {
@@ -58,6 +56,6 @@ function getLoginStatus() {
   });
 }
 function start(){
-    getGreetingUsingArrowFunctions();
+    getComments();
     getLoginStatus();
 }

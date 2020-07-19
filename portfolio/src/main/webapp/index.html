@@ -19,14 +19,14 @@
         <p>LinkedIn.</p>
     </a>
 
-      <p>Click here to get a random message:</p>
-      <button onclick="getGreetingUsingArrowFunctions()">Hello</button>
-      <div id="greeting-container"></div>
+      <button onclick="getComments()">Refresh Comments</button>
+      <p>Comments:</p>
+      <div id="comments-container"></div>
 
       <div id="form-container" style="display:none;">
       <form action="/data" method="POST">
 
-        <p>Enter a comma-separated list of words:</p>
+        <p>Enter comment:</p>
         <textarea name="text-input"></textarea>
 
         <input type="submit" />
