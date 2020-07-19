@@ -41,6 +41,12 @@ function getLoginStatus() {
   fetch('/home').then(response => response.text()).then((html) => {
     document.getElementById('login-container').innerHTML = html;
 
+    if (document.getElementById('email-line').innerText != "Hello stranger.") {
+        document.getElementById('form-container').style.display = "";
+    } else {
+        document.getElementById('form-container').style.display = "none";
+    }
+
   });
 }
 function start(){
