@@ -32,9 +32,17 @@ function addRandomGreeting() {
   greetingContainer.innerText = greeting;
 }
 function getGreetingUsingArrowFunctions() {
-  fetch('/data').then(response => response.text()).then((quote) => {
-    document.getElementById('greeting-container').innerText = quote;
-    console.log(quote);
+  fetch('/data').then(response => response.json()).then((comments) => {
+    console.log(comments);
+    var html = "<ul>";
+q
+    for (const comment of comments) {
+        html += `<li>${comment['email']}: ${comment['text']}</li>`;
+    }
+    html += "</ul>";
+    document.getElementById('greeting-container').innerHTML = html;
+    //document.getElementById('greeting-container').innerText = json;
+    //console.log(quote);
   });
 }
 function getLoginStatus() {
