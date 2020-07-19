@@ -42,6 +42,10 @@ public class DataServlet extends HttpServlet {
   public void init() {
     quotes = new ArrayList<>();
   }
+  private class Comment {
+    String text;
+    String email;
+  }
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -50,13 +54,17 @@ public class DataServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
 
-    ArrayList<String> comments = new ArrayList<>();
+    ArrayList<Comment> comments = new ArrayList<>();
     for (Entity entity : results.asIterable()) {
-      String comment = (String) entity.getProperty("text");
+      String text = (String) entity.getProperty("text");
+      String email = (String) entity.getProperty("email");
+      Comment comment = new Comment();
+      comment.text = text;
+      comment.email = email;
       comments.add(comment);
     }
-
-    String json = convertToJsonUsingGson(comments);
+    Gson gson = new Gson();
+    String json = gson.toJson(comments);
     response.setContentType("text/html;");
     response.getWriter().println(json);
   }
