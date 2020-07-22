@@ -15,6 +15,8 @@
 package com.google.sps.servlets;
 import com.google.gson.Gson;
 
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -40,6 +42,10 @@ public class DataServlet extends HttpServlet {
   public void init() {
     quotes = new ArrayList<>();
   }
+  private class Comment {
+    String text;
+    String email;
+  }
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -48,19 +54,29 @@ public class DataServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
 
-    ArrayList<String> comments = new ArrayList<>();
+    ArrayList<Comment> comments = new ArrayList<>();
     for (Entity entity : results.asIterable()) {
-      String comment = (String) entity.getProperty("text");
+      String text = (String) entity.getProperty("text");
+      String email = (String) entity.getProperty("email");
+      Comment comment = new Comment();
+      comment.text = text;
+      comment.email = email;
       comments.add(comment);
     }
-
-    String json = convertToJsonUsingGson(comments);
+    Gson gson = new Gson();
+    String json = gson.toJson(comments);
     response.setContentType("text/html;");
     response.getWriter().println(json);
   }
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
+    UserService userService = UserServiceFactory.getUserService();
+    String userEmail;
+    if (userService.isUserLoggedIn()) {
+      userEmail = userService.getCurrentUser().getEmail();
+    } else {
+      userEmail = "";
+    }
     // Get the input from the form.
     String text = getParameter(request, "text-input", "");
     long timestamp = System.currentTimeMillis();
@@ -68,6 +84,7 @@ public class DataServlet extends HttpServlet {
     Entity taskEntity = new Entity("Comment");
     taskEntity.setProperty("text", text);
     taskEntity.setProperty("timestamp", timestamp);
+    taskEntity.setProperty("email", userEmail);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(taskEntity);
     // Redirect back to the HTML page.

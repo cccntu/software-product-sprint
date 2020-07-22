@@ -31,9 +31,31 @@ function addRandomGreeting() {
   const greetingContainer = document.getElementById('greeting-container');
   greetingContainer.innerText = greeting;
 }
-function getGreetingUsingArrowFunctions() {
-  fetch('/data').then(response => response.text()).then((quote) => {
-    document.getElementById('greeting-container').innerText = quote;
-    console.log(quote);
+function getComments() {
+  fetch('/data').then(response => response.json()).then((comments) => {
+    console.log(comments);
+    var html = "<ul>";
+
+    for (const comment of comments) {
+        html += `<li>${comment['email']}: ${comment['text']}</li>`;
+    }
+    html += "</ul>";
+    document.getElementById('comments-container').innerHTML = html;
   });
+}
+function getLoginStatus() {
+  fetch('/home').then(response => response.text()).then((html) => {
+    document.getElementById('login-container').innerHTML = html;
+
+    if (document.getElementById('email-line').innerText != "Hello stranger.") {
+        document.getElementById('form-container').style.display = "";
+    } else {
+        document.getElementById('form-container').style.display = "none";
+    }
+
+  });
+}
+function start(){
+    getComments();
+    getLoginStatus();
 }
